@@ -60,14 +60,14 @@
   <find id="list">
     {
       "selector": {
-      "$and": [
-          {
+        "$and": [
+        {
           "docType": {"$eq": "USER"},
-          "ownerId": {"$eq": "OwncyaftCh" }
-          }        
-       ]
-      },
-      "fields": [ "_id", "_rev", "ownerId", "sourceId", "docType", "name", "email","status","acctId","assetIam","serial"]
+          "ownerId": {"$eq": "OwnerIdloop.user.5" }
+        }
+      ]
+    },
+    "fields": [ "_id", "_rev", "ownerId", "sourceId", "docType", "name", "email","status","acctId","assetIam","serial"]
     }
   </find>
   

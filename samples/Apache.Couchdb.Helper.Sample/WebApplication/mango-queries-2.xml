@@ -87,7 +87,7 @@
   <!-- 
   The commands below point to execute views stored internally in CouchDb.
   -->
-  <view id="view" path="doc-teste/_view/view-teste">
+  <view id="view23" path="doc-teste/_view/view-teste">
     <!-- This command runs the view and informs multiple keys -->
     {
       "queries":
@@ -104,7 +104,7 @@
   </view>
 
   <!-- This command only runs a view without entering any parameters -->
-  <view id="view2" path="doc-teste/_view/view-teste" />
+  <view id="view22" path="doc-teste/_view/view-teste" />
 
 </statements>
 

@@ -7,12 +7,12 @@
 <statements>
   
   <!-- Define bridge to views stored in coucdb database -->
-    <view id="view" path="doc-teste/_view/view-teste">
+  <view id="view" path="doc-teste/_view/view-teste">
     {
       "queries":
       [
         {
-          "keys": :in:keys
+          "keys": :in:keys 
         },
         {
           "limit": 3,

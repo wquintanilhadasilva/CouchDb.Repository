@@ -9,5 +9,9 @@
     <PackageReference Include="CouchDb.Repository.Helper.Extensions" Version="1.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
+  </ItemGroup>
+
 
 </Project>

@@ -1,66 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ClassLibrary;
-using ConsoleApp.Repositories;
-using CouchDb.Repository.Helper.Extensions;
+using System.Text;
 
-namespace ConsoleApp
+namespace ClassLibrary
 {
-    class Program
+    public class ActionsHelper
     {
-        static void Main(string[] args)
-        {
-            /**
-             * Indicates the configuration file containing the couchDb
-             * access data [appsettings.json], the name of the section 
-             * within this file with these data [CouchDbConnections] and 
-             * also the file with the commands mango queries find and 
-             * view that will be used by the program [mango -queries.xml].
-             */
-            CouchDbRepositoryExtensions.ConfigureCouchdDbHelper("appsettings.json", "CouchDbConnections", "mango-queries.xml");
-
-            Console.WriteLine("CouchDb Helper Hello World use Sample!");
-
-            // Add document data
-            Console.WriteLine("Create documents");
-            addOneRecord();
-            addMutipleRecords();
-
-            // Update document data
-            Console.WriteLine("Update documents");
-            updateOneRecord();
-            updateMutipleRecords();
-
-            // Query load and select documents
-            Console.WriteLine("Query load and select documents to application objects");
-            queryFilter("true");  // add filter condition in mango query
-            queryFilter("false"); // not add filter condition in mango query
-            queryNoFilter();
-            queryNoParam();
-            queryWithStatuses();
-
-            // Views query load and select documents
-            Console.WriteLine("Query load and select documents USING VIEWS to application objects");
-            viewWithKeysAndPathParameter();
-            viewWithPathParameter();
-            viewWithNoParameter();
-            viewWithNoParameterWithKeys();
-
-            // Read documents from type object
-            Console.WriteLine("Load ALL documents of a type");
-            readAllDocumentsFromType();
-
-            // Delete documents
-            Console.WriteLine("Delete documents");
-            deleteOneRecord();
-            deleteMutipleRecords();
-
-            Console.ReadKey();
-
-        }
-
-        static void queryNoFilter()
+        public void queryNoFilter()
         {
 
             Console.WriteLine("queryNoFilter");
@@ -79,17 +25,18 @@ namespace ConsoleApp
 
         }
 
-        static void queryFilter(string addFilter)
+        public void queryFilter(string addFilter)
         {
             Console.WriteLine($"queryFilter {addFilter}");
 
-            IList <User> users;
+            IList<User> users;
 
             string sid = "OwnerIdemail@email.com";
-            if(addFilter.Equals("true"))
+            if (addFilter.Equals("true"))
             {
                 sid = "OwnerIdloop.user.9";
-            } else
+            }
+            else
             {
                 sid = "OwnerIdloop.user.3";
             }
@@ -106,7 +53,7 @@ namespace ConsoleApp
 
         }
 
-        static void queryNoParam()
+        public void queryNoParam()
         {
             Console.WriteLine("queryNoParam");
 
@@ -114,7 +61,7 @@ namespace ConsoleApp
 
             using (UserRepository db = new UserRepository())
             {
-                var query = db.FindOf("list"); 
+                var query = db.FindOf("list");
                 users = db.List<User>(query);
             }
 
@@ -124,7 +71,7 @@ namespace ConsoleApp
 
         }
 
-        static void queryWithStatuses()
+        public void queryWithStatuses()
         {
             Console.WriteLine("queryWithStatuses");
 
@@ -147,7 +94,7 @@ namespace ConsoleApp
         /// <summary>
         /// Run the view by passing keys and additional parameters according to couchdb documentation
         /// </summary>
-        static void viewWithKeysAndPathParameter()
+        public void viewWithKeysAndPathParameter()
         {
             Console.WriteLine("viewWithKeysAndPathParameter");
 
@@ -178,7 +125,7 @@ namespace ConsoleApp
         /// <summary>
         /// Run the view by no passing keys but use additional parameters according to couchdb documentation
         /// </summary>
-        static void viewWithPathParameter()
+        public void viewWithPathParameter()
         {
             Console.WriteLine("viewWithParameter");
 
@@ -204,7 +151,7 @@ namespace ConsoleApp
         /// <summary>
         /// Executes the view but does not pass any keys or additional parameters.
         /// </summary>
-        static void viewWithNoParameter()
+        public void viewWithNoParameter()
         {
             Console.WriteLine("viewWithNoParameter");
 
@@ -222,7 +169,7 @@ namespace ConsoleApp
 
         }
 
-        static void viewWithNoParameterWithKeys()
+        public void viewWithNoParameterWithKeys()
         {
             Console.WriteLine("viewWithNoParameterWithKeys");
 
@@ -244,7 +191,7 @@ namespace ConsoleApp
 
         }
 
-        static void readAllDocumentsFromType()
+        public void readAllDocumentsFromType()
         {
             Console.WriteLine("readAllDocumentsFromType");
 
@@ -265,7 +212,7 @@ namespace ConsoleApp
         /// <summary>
         /// Add ONE record document in database
         /// </summary>
-        static void addOneRecord()
+        public void addOneRecord()
         {
             Console.WriteLine("addOneRecord");
 
@@ -283,12 +230,12 @@ namespace ConsoleApp
         /// <summary>
         /// Add mutiple documents in database
         /// </summary>
-        static void addMutipleRecords()
+        public void addMutipleRecords()
         {
             Console.WriteLine("addMutipleRecords");
 
             var users = new List<User>();
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 users.Add(createUser($"loop.user.{i}"));
             }
@@ -318,7 +265,7 @@ namespace ConsoleApp
             Console.WriteLine("=====================");
         }
 
-        static void updateOneRecord()
+        public void updateOneRecord()
         {
             Console.WriteLine("updateOneRecord");
 
@@ -338,9 +285,9 @@ namespace ConsoleApp
         /// <summary>
         /// Updates a group of documents at once in the database.Remember that CouchDb does not implement ACID properties.
         /// </summary>
-        static void updateMutipleRecords()
+        public void updateMutipleRecords()
         {
-            Console.WriteLine("updateMutipleRecords");                       
+            Console.WriteLine("updateMutipleRecords");
 
             using (UserRepository db = new UserRepository())
             {
@@ -373,7 +320,7 @@ namespace ConsoleApp
             Console.WriteLine("=====================");
         }
 
-        static void deleteOneRecord()
+        public void deleteOneRecord()
         {
             Console.WriteLine("deleteOneRecord");
 
@@ -389,7 +336,7 @@ namespace ConsoleApp
             Console.WriteLine("=====================");
         }
 
-        static void deleteMutipleRecords()
+        public void deleteMutipleRecords()
         {
             Console.WriteLine("deleteMutipleRecords");
 
@@ -422,9 +369,10 @@ namespace ConsoleApp
             Console.WriteLine("=====================");
         }
 
-        static User createUser(string id)
+        private User createUser(string id)
         {
-            return new User {
+            return new User
+            {
                 Id = id,
                 Name = $"User Name for {id}",
                 AcctId = $"ACCT-{id}",
@@ -437,7 +385,5 @@ namespace ConsoleApp
                 Status = Status.ACTIVE
             };
         }
-
     }
-
 }

@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Transactions;
 using ClassLibrary;
 using ConsoleApp.Repositories;
-using CouchDb.Repository.Helper.Extensions;
+using Microsoft.AspNetCore.Mvc;
 
-namespace ConsoleApp
+namespace WebApplication.Controllers
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            /**
-             * Indicates the configuration file containing the couchDb
-             * access data [appsettings.json], the name of the section 
-             * within this file with these data [CouchDbConnections] and 
-             * also the file with the commands mango queries find and 
-             * view that will be used by the program [mango -queries.xml].
-             */
-            CouchDbRepositoryExtensions.ConfigureCouchdDbHelper("appsettings.json", "CouchDbConnections", "mango-queries.xml");
 
+    [ApiController]
+    [Route("[controller]")]
+    public class HomeController : Controller
+    {
+        [HttpGet]
+        public IActionResult Index()
+        {
             Console.WriteLine("CouchDb Helper Hello World use Sample!");
 
             // Add document data
@@ -56,11 +53,12 @@ namespace ConsoleApp
             deleteOneRecord();
             deleteMutipleRecords();
 
-            Console.ReadKey();
-
+            return Ok("Success");
         }
 
-        static void queryNoFilter()
+
+
+        public void queryNoFilter()
         {
 
             Console.WriteLine("queryNoFilter");
@@ -69,7 +67,9 @@ namespace ConsoleApp
 
             using (UserRepository db = new UserRepository())
             {
+                // Create a Find Object with parameters. Id name are defined in mango-queries.xml or included files
                 var query = db.FindOf("list-all-no-parameters", new { id = "OwnerIdemail@email.com" });
+                //Submit a Find command to database
                 users = db.List<User>(query);
             }
 
@@ -79,24 +79,27 @@ namespace ConsoleApp
 
         }
 
-        static void queryFilter(string addFilter)
+        public void queryFilter(string addFilter)
         {
             Console.WriteLine($"queryFilter {addFilter}");
 
-            IList <User> users;
+            IList<User> users;
 
             string sid = "OwnerIdemail@email.com";
-            if(addFilter.Equals("true"))
+            if (addFilter.Equals("true"))
             {
                 sid = "OwnerIdloop.user.9";
-            } else
+            }
+            else
             {
                 sid = "OwnerIdloop.user.3";
             }
 
             using (UserRepository db = new UserRepository())
             {
+                // Create a Find Object with parameters
                 var query = db.FindOf("list-all", new { id = sid, addFilter = addFilter, filter = "(?i)loop.user" }); // (?i) is 'like sql equivalent' regex expression 
+                //Submit a Find command to database
                 users = db.List<User>(query);
             }
 
@@ -106,7 +109,7 @@ namespace ConsoleApp
 
         }
 
-        static void queryNoParam()
+        public void queryNoParam()
         {
             Console.WriteLine("queryNoParam");
 
@@ -114,7 +117,9 @@ namespace ConsoleApp
 
             using (UserRepository db = new UserRepository())
             {
-                var query = db.FindOf("list"); 
+                // Create a Find Object without parameters
+                var query = db.FindOf("list");
+                //Submit a Find command to database
                 users = db.List<User>(query);
             }
 
@@ -124,7 +129,7 @@ namespace ConsoleApp
 
         }
 
-        static void queryWithStatuses()
+        public void queryWithStatuses()
         {
             Console.WriteLine("queryWithStatuses");
 
@@ -134,7 +139,9 @@ namespace ConsoleApp
 
             using (UserRepository db = new UserRepository())
             {
+                // Create a Find Object with parameters
                 var query = db.FindOf("list-status", new { id = "OwnerIdloop.user.7", statuses = sts });
+                //Submit a Find command to database
                 users = db.List<User>(query);
             }
 
@@ -147,16 +154,16 @@ namespace ConsoleApp
         /// <summary>
         /// Run the view by passing keys and additional parameters according to couchdb documentation
         /// </summary>
-        static void viewWithKeysAndPathParameter()
+        public void viewWithKeysAndPathParameter()
         {
             Console.WriteLine("viewWithKeysAndPathParameter");
 
-            //// view additional params
-            //var pathparam = new Dictionary<string, string>
-            //{
-            //    ["descending"] = "false",
-            //    ["include_docs "] = "true"
-            //};
+            // view additional params
+            var pathparam = new Dictionary<string, string>
+            {
+                ["descending"] = "false",
+                ["include_docs "] = "true"
+            };
 
             IList<User> users;
 
@@ -168,7 +175,8 @@ namespace ConsoleApp
                     keys = new String[] { "email@email.com", "email@email.com" }
                 });
 
-                users = db.List<User>(query);
+                //Submit a Find command to database
+                users = db.List<User>(query, pathparam);
             }
 
             Console.WriteLine("=====================");
@@ -178,7 +186,7 @@ namespace ConsoleApp
         /// <summary>
         /// Run the view by no passing keys but use additional parameters according to couchdb documentation
         /// </summary>
-        static void viewWithPathParameter()
+        public void viewWithPathParameter()
         {
             Console.WriteLine("viewWithParameter");
 
@@ -193,7 +201,9 @@ namespace ConsoleApp
 
             using (UserRepository db = new UserRepository())
             {
+                // Create a Find Object with parameters
                 var query = db.FindOf("view2");
+                //Submit a Find command to database
                 users = db.List<User>(query, pathparam);
             }
 
@@ -204,7 +214,7 @@ namespace ConsoleApp
         /// <summary>
         /// Executes the view but does not pass any keys or additional parameters.
         /// </summary>
-        static void viewWithNoParameter()
+        public void viewWithNoParameter()
         {
             Console.WriteLine("viewWithNoParameter");
 
@@ -212,7 +222,9 @@ namespace ConsoleApp
 
             using (UserRepository db = new UserRepository())
             {
+                // Create a Find Object
                 var query = db.FindOf("view2");
+                //Submit a Find command to database
                 users = db.List<User>(query);
             }
 
@@ -222,7 +234,7 @@ namespace ConsoleApp
 
         }
 
-        static void viewWithNoParameterWithKeys()
+        public void viewWithNoParameterWithKeys()
         {
             Console.WriteLine("viewWithNoParameterWithKeys");
 
@@ -244,7 +256,7 @@ namespace ConsoleApp
 
         }
 
-        static void readAllDocumentsFromType()
+        public void readAllDocumentsFromType()
         {
             Console.WriteLine("readAllDocumentsFromType");
 
@@ -265,7 +277,7 @@ namespace ConsoleApp
         /// <summary>
         /// Add ONE record document in database
         /// </summary>
-        static void addOneRecord()
+        public void addOneRecord()
         {
             Console.WriteLine("addOneRecord");
 
@@ -283,12 +295,12 @@ namespace ConsoleApp
         /// <summary>
         /// Add mutiple documents in database
         /// </summary>
-        static void addMutipleRecords()
+        public void addMutipleRecords()
         {
             Console.WriteLine("addMutipleRecords");
 
             var users = new List<User>();
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 users.Add(createUser($"loop.user.{i}"));
             }
@@ -318,7 +330,7 @@ namespace ConsoleApp
             Console.WriteLine("=====================");
         }
 
-        static void updateOneRecord()
+        public void updateOneRecord()
         {
             Console.WriteLine("updateOneRecord");
 
@@ -338,9 +350,9 @@ namespace ConsoleApp
         /// <summary>
         /// Updates a group of documents at once in the database.Remember that CouchDb does not implement ACID properties.
         /// </summary>
-        static void updateMutipleRecords()
+        public void updateMutipleRecords()
         {
-            Console.WriteLine("updateMutipleRecords");                       
+            Console.WriteLine("updateMutipleRecords");
 
             using (UserRepository db = new UserRepository())
             {
@@ -373,7 +385,7 @@ namespace ConsoleApp
             Console.WriteLine("=====================");
         }
 
-        static void deleteOneRecord()
+        public void deleteOneRecord()
         {
             Console.WriteLine("deleteOneRecord");
 
@@ -389,7 +401,7 @@ namespace ConsoleApp
             Console.WriteLine("=====================");
         }
 
-        static void deleteMutipleRecords()
+        public void deleteMutipleRecords()
         {
             Console.WriteLine("deleteMutipleRecords");
 
@@ -422,9 +434,10 @@ namespace ConsoleApp
             Console.WriteLine("=====================");
         }
 
-        static User createUser(string id)
+        private User createUser(string id)
         {
-            return new User {
+            return new User
+            {
                 Id = id,
                 Name = $"User Name for {id}",
                 AcctId = $"ACCT-{id}",
@@ -439,5 +452,4 @@ namespace ConsoleApp
         }
 
     }
-
 }
