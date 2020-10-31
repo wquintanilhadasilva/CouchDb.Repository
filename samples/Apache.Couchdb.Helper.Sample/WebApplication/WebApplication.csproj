@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CouchDb.Repository.Helper" Version="1.0.2" />
+    <PackageReference Include="CouchDb.Repository.Helper.Extensions" Version="1.0.2" />
+  </ItemGroup>
+
+
+</Project>

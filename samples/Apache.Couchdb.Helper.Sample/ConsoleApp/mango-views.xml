@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+  defines the views commands
+  See https://docs.couchdb.org/en/stable/ddocs/views/index.html
+-->
+<statements>
+  
+  <!-- Define bridge to views stored in coucdb database -->
+  <view id="view" path="doc-teste/_view/view-teste">
+    {
+      "queries":
+      [
+        {
+          "keys": :in:keys 
+        },
+        {
+          "limit": 3,
+          "skip": 2
+        }
+      ]
+    }
+  </view>
+
+  <!-- Define bridge to views stored in coucdb database -->
+  <view id="view2" path="doc-teste/_view/view-teste" />
+  
+</statements>
+

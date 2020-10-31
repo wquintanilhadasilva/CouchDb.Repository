@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<statements>
+
+  <!-- <include file="mango-queries-3.xml"/> -->
+
+  <!--
+    ADD IN THIS FILE ANOTHER DYNAMIC MANGO QUERIES 
+    Use logical control structures (if, switch-case and set),
+    to create queries according to the values ​​of variables
+    passed in the parameters.
+    
+    
+    Use :paramname to concatenate parameter values ​​of variables or objects in the generated command. Add space before and after param.
+    Use :in:paramname to concatenate a list of values ​​with the "in" parameter of the mango querie. Add space before and after param.
+    
+    use <find id="find-id"></find> command to build find commands. See https://docs.couchdb.org/en/stable/api/database/find.html?highlight=find#db-find
+    
+    use <view id="view-id" path="view-path"></view> command to build view commands. See https://docs.couchdb.org/en/stable/ddocs/views/index.html
+    
+  -->
+  
+  <!-- Samples of dynamic mango querie command -->
+  
+  <find id="id-of-command">
+    <description>Description of command</description>
+    {
+      "selector": {
+      "typeDoc": "COURSE_REALIZATION",
+      "year": :year ,
+      "semester": :semester ,
+      "courseInformation": {
+        "courseRef": {
+        "code": in { :in:courseCode }
+      }
+      <![CDATA[
+        {,"campo": "inner of cDATA is fixed content in querie"}
+      ]]>
+      <set separator=","> <!-- added between if elements -->
+        <start>
+          WHERE           <!-- fixed constant will be add in start mango querie generated -->
+        </start>
+        <if test="condition == true"> <!-- condition to build block below. "condition" are be nested object path: property.property.property-->
+          "field": :Object.Object.Object.Property,
+          <if test="a == a">          <!-- nested condition -->
+            "field-dentro-if":  if with in another if
+            <if test="b == b">        <!-- nested nested condition -->
+              "field-dentro-if-nivel3": if with in another if level 3
+            </if>
+          </if>
+        </if>
+        <if test="condition2 != false">  <!-- condition to build block below -->
+          "field2": :YATAHHHH!
+        </if>
+        <switch test="fieldcheck"> <!-- Switch condition to build block below-->
+          <case value="D">Case equals 'D', include this text</case>
+          <case value="E">Case equals 'E', include this text</case>
+        </switch>
+      </set>
+      <if test="condition == true"> <!-- condition to build block below -->
+        , "fieldX": :Object.Object.Property
+      </if>
+      <switch test="atribute">
+        <case value="A">
+          Case equals 'A', include this text
+          <if test="case-if-condition == true">
+            , "IF-CASE": CASE IF CONDITION!
+          </if>
+          <if test="case-if-condition2 == true">
+            , "IF-CASE-2": CASE IF CONDITION2!
+            <if test="case-if-condition-2-1 == true">
+              , "IF-CASE-2-1": CASE IF CONDITION-2-1!
+              <if test="case-if-condition-2-1-1 == true">
+                , "IF-CASE-2-1-1": CASE IF CONDITION-2-1-1!
+              </if>
+            </if>
+          </if>
+        </case>
+        <case value="B">Case equals 'B', include this text</case>
+        <case value="C">Case equals 'C', include this text</case>
+        <default>If none of the above, include this</default>
+      </switch>
+      , "limit": 1
+    }
+  </find>
+  
+  <!-- 
+  The commands below point to execute views stored internally in CouchDb.
+  -->
+  <view id="view30" path="doc-teste/_view/view-teste">
+    <!-- This command runs the view and informs multiple keys -->
+    {
+      "queries":
+      [
+        {
+          "keys": :in:keys
+        },
+        {
+          "limit": 3,
+          "skip": 2
+        }
+      ]
+    }
+  </view>
+
+  <!-- This command only runs a view without entering any parameters -->
+  <view id="view20" path="doc-teste/_view/view-teste" />
+
+</statements>
+

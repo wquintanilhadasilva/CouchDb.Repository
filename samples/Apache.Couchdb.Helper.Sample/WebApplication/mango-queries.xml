@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+  defines the mango queries commands and the context (database) where they will be applied
+  See https://docs.couchdb.org/en/stable/api/database/find.html?highlight=find#db-find
+-->
+<statements context="users-db">
+  
+  <!-- includes all the contents of the other files (mango-queries-2.xml and mango-views.xml) to be used in this context -->
+  <include file="mango-queries-2.xml"/> <!-- File with sample use this xml parse resource -->
+  <include file="mango-views.xml" />    <!-- File with views command content -->
+
+  <find id="list-all">
+    <description>List all users data</description>
+    {
+      "selector": {
+        "$and": [
+          {
+            "docType": {"$eq": "USER"},
+            "ownerId": {"$eq": :id }
+          }
+          <if test="addFilter == true">
+            <!-- if filter is not null, then use it on mango querie to get the data checking name or email -->
+            ,{
+              "$or": [
+                {"name": {"$regex": :filter }},
+                {"email": {"$regex": :filter }}
+              ]
+            }
+          </if>
+        ]
+      },
+      "fields": [ "_id", "_rev", "ownerId", "sourceId", "docType", "name", "email","status","acctId","assetIam","serial"]
+    }
+
+  </find>
+
+  <find id="list-all-no-parameters">
+    {
+      "selector": {
+      "$and": [
+          {
+          "docType": {"$eq": "USER"},
+          "ownerId": {"$eq": :id }
+          }
+        
+          ,{
+              "$or": [
+              {"name": {"$regex": "(?i)r"}},
+              {"email": {"$regex": "(?i)r"}}
+              ]
+          }
+        
+      ]
+      },
+      "fields": [ "_id", "_rev", "ownerId", "sourceId", "docType", "name", "email","status","acctId","assetIam","serial"]
+    }
+  </find>
+  
+  <find id="list">
+    {
+      "selector": {
+      "$and": [
+          {
+          "docType": {"$eq": "USER"},
+          "ownerId": {"$eq": "OwncyaftCh" }
+          }        
+       ]
+      },
+      "fields": [ "_id", "_rev", "ownerId", "sourceId", "docType", "name", "email","status","acctId","assetIam","serial"]
+    }
+  </find>
+  
+  <find id="list-status">
+    {
+      "selector": {
+      "$and": [
+          {
+          "docType": {"$eq": "USER"},
+          "ownerId": {"$eq": :id },
+          "status": {"$in": :in:statuses }
+          }        
+       ]
+      },
+      "fields": [ "_id", "_rev", "ownerId", "sourceId", "docType", "name", "email","status","acctId","assetIam","serial"]
+    }
+  </find>
+  
+</statements>
+
