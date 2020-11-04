@@ -275,6 +275,7 @@ namespace ConsoleApp
             {
                 var result = db.Insert<User>(user); // add document and return instance changed with operation revision id
                 Console.WriteLine(result.Revision);
+                Console.WriteLine(result.Id);
             }
 
             Console.WriteLine("=====================");
