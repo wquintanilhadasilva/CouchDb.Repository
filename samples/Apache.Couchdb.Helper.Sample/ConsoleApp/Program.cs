@@ -53,8 +53,8 @@ namespace ConsoleApp
 
             // Delete documents
             Console.WriteLine("Delete documents");
-            deleteOneRecord();
-            deleteMutipleRecords();
+            //deleteOneRecord();
+            //deleteMutipleRecords();
 
             Console.ReadKey();
 
@@ -96,7 +96,7 @@ namespace ConsoleApp
 
             using (UserRepository db = new UserRepository())
             {
-                var query = db.FindOf("list-all", new { id = sid, addFilter = addFilter, filter = "(?i)loop.user" }); // (?i) is 'like sql equivalent' regex expression 
+                var query = db.FindOf("list-all", new { id = sid, addFilter = Boolean.Parse(addFilter), filter = "(?i)loop.user" }); // (?i) is 'like sql equivalent' regex expression 
                 users = db.List<User>(query);
             }
 
